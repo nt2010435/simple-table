@@ -8,8 +8,19 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    private let dwarves = [
+        "Sleepy", "Sneezy", "Bashful", "Happy",
+        "Doc", "Grumpy", "Dopey",
+        "Thorin", "Dorin", "Nori", "Ori",
+        "Balin", "Dwalin", "Fili", "Kili",
+        "Oin", "Gloin", "Bifur", "Bofur",
+        "Bombur"
+    ]
+    
+    let simpleTableIdentifier = "SimpleTableIdentifier"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -20,6 +31,28 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        return dwarves.count
+    }
+    
+    func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCell(withIdentifier: simpleTableIdentifier)
+        if (cell == nil) {
+            cell = UITableViewCell(
+                style: UITableViewCellStyle.default,
+                reuseIdentifier: simpleTableIdentifier)
+        }
+        
+        let image = UIImage(named: "star")
+        cell?.imageView?.image = image
+        let highlightedImage = UIImage(named: "star2")
+        cell?.imageView?.highlightedImage = highlightedImage
+        
+        cell?.textLabel?.text = dwarves[indexPath.row]
+        return cell!
+    }
 
 }
 
