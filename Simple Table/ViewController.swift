@@ -36,15 +36,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return dwarves.count
     }
     
+    //construct table view cell with identifier to populate the row
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCell(withIdentifier: simpleTableIdentifier)
         if (cell == nil) {
             cell = UITableViewCell(
-                style: UITableViewCellStyle.subtitle,
+                style: UITableViewCellStyle.subtitle, //cell layout
                 reuseIdentifier: simpleTableIdentifier)
         }
         
+        //add image to the row and change to 'star2' when row selected
         let image = UIImage(named: "star")
         cell?.imageView?.image = image
         let highlightedImage = UIImage(named: "star2")
@@ -60,5 +62,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell!
     }
 
+    //Specify first row not selectable
+    func tableView(_ tableView: UITableView,
+                   willSelectRowAt indexPath: IndexPath)
+        -> IndexPath? {
+            //set first row to non selectable
+            //return indexPath.row == 0 ? nil : indexPath
+            
+            //set first row not selectable, when select odd row - next even row gets selected
+            if indexPath.row == 0 {
+                return nil
+            } else if (indexPath.row % 2 == 0){
+                return NSIndexPath(row: indexPath.row + 1,
+                                   section: indexPath.section) as IndexPath
+            } else {
+                return indexPath
+            }
+    }
+    
+    //method to handle selection of the row
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
+        let rowValue = dwarves[indexPath.row]
+        let message = "You selected \(rowValue)"
+        let controller = UIAlertController(title: "Row Selected",
+                                           message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Yes I Did",
+                                   style: .default, handler: nil)
+        controller.addAction(action)
+        present(controller, animated: true, completion: nil)
+    }
 }
 
